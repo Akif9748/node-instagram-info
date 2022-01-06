@@ -1,0 +1,22 @@
+{
+  "name": "insta-info",
+  "version": "1.0.0",
+  "description": "You can see instagram infos of users.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akif9748/node-instagram-info.git"
+  },
+  "author": "Akif9748",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Akif9748/node-instagram-info/issues"
+  },
+  "homepage": "https://github.com/Akif9748/node-instagram-info#readme",
+  "dependencies": {
+    "node-fetch": "^2.6.6"
+  }
+}
