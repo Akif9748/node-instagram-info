@@ -16,6 +16,7 @@ module.exports = async (username) => {
         console.log("Following:", body.graphql.user.edge_follow.count);
         console.log("Post Count:", body.graphql.user.edge_owner_to_timeline_media.count);
         console.log("Biography:\n", body.graphql.user.biography);
+        console.log("Website:", (body.graphql.user.external_url) ? body.graphql.user.external_url : 'No');
 
         fetch(body.graphql.user.profile_pic_url_hd).then(res => {
             res.body.pipe(fs.createWriteStream(`./images/${username}.png`));
