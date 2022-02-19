@@ -1,30 +1,34 @@
 const fs = require("fs");
 const fetch = require("node-fetch");
-
+const { log } = console;
 module.exports = async (username) => {
-
+    //Get profile info:
     const response = await fetch(`https://www.instagram.com/${username}/?__a=1`);
-
+    //Success or 
     if (response.status === 200) {
+        //Get in JSON type:
         const body = await response.json();
+        //Write to a file named username:
         fs.writeFileSync(`./data/${username}.json`, JSON.stringify(body));
-        console.log("Username:", body.graphql.user.username);
-        console.log("Full Name:", body.graphql.user.full_name);
-        console.log("Is private?", (body.graphql.user.is_private) ? 'Yes' : 'No');
-        console.log("ID:", body.graphql.user.id);
-        console.log("Followers:", body.graphql.user.edge_followed_by.count);
-        console.log("Following:", body.graphql.user.edge_follow.count);
-        console.log("Post Count:", body.graphql.user.edge_owner_to_timeline_media.count);
-        console.log("Biography:\n", body.graphql.user.biography);
-        console.log("Website:", (body.graphql.user.external_url) ? body.graphql.user.external_url : 'No');
+        //Logging to console user infos:
+        const user = body.graphql.user;
+        log("Username:", user.username);
+        log("Full Name:", user.full_name);
+        log("Is private?", user.is_private ? 'Yes' : 'No');
+        log("ID:", user.id);
+        log("Followers:", user.edge_followed_by.count);
+        log("Following:", user.edge_follow.count);
+        log("Post Count:", user.edge_owner_to_timeline_media.count);
+        log("\nWebsite:", user.external_url ? user.external_url : 'No');
+        log("\nBiography:\n" + user.biography);
 
-        fetch(body.graphql.user.profile_pic_url_hd).then(res => {
-            res.body.pipe(fs.createWriteStream(`./images/${username}.png`));
-         console.log(res.status, 'Downloading profile photo is success');
+        //Download user profile photo:
+        const pic = await fetch(user.profile_pic_url_hd);
+        pic.body.pipe(fs.createWriteStream(`./images/${username}.png`));
+        log(pic.status, 'Downloading profile photo is success');
 
-        });
-      
-    } else {
+
+    } else { //Not success
         console.error(response.status, "Write user name correctly.");
         return process.exit(0);
     }
